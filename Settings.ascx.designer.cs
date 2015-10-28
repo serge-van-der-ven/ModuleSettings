@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace XEC.DNN.ModuleSettings {
+namespace XEC.DNN.ModuleSettingsModule {
     
     
     public partial class Settings {

@@ -50,11 +50,11 @@ namespace DotNetNuke.Entities.Modules
 
         #region Properties
 
-        public BaseParameterAttribute Attribute { get; }
+        public BaseParameterAttribute Attribute { get; set; }
 
-        public string ParameterName { get; }
+        public string ParameterName { get; set;  }
 
-        public PropertyInfo Property { get; }
+        public PropertyInfo Property { get; set;  }
 
         #endregion
     }

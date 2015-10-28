@@ -14,9 +14,9 @@ using System;
 using System.Globalization;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Entities.Modules;
-using XEC.DNN.ModuleSettings.Components;
+using XEC.DNN.ModuleSettingsModule.Components;
 
-namespace XEC.DNN.ModuleSettings
+namespace XEC.DNN.ModuleSettingsModule
 {
     /// -----------------------------------------------------------------------------
     /// <summary>
@@ -31,7 +31,7 @@ namespace XEC.DNN.ModuleSettings
     /// 
     /// </summary>
     /// -----------------------------------------------------------------------------
-    public partial class View : PortalModuleBase
+    public partial class View : ModuleBase
     {
         /// <summary>
         /// Handles the Load event of the Page control.
@@ -42,28 +42,25 @@ namespace XEC.DNN.ModuleSettings
         {
             try
             {
-                var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
-                var typedModuleSettings = persister.Load(this.Settings);
-
                 // ReSharper disable once AssignmentInConditionalExpression
-                if (this.pnlSettings.Visible = typedModuleSettings.IsInitialized)
+                if (this.pnlSettings.Visible = Settings.IsInitialized)
                 {
                     this.lblModuleInitializedMessage.Text = this.LocalizeString("ModuleInitializedMessage");
 
 
-                    this.lblSettingCssClassValue.Text = typedModuleSettings.CssClass;
-                    if (typedModuleSettings.Initialize.HasValue)
+                    this.lblSettingCssClassValue.Text = Settings.CssClass;
+                    if (Settings.Initialize.HasValue)
                     {
-                        this.chkSettingInitialize.Checked = typedModuleSettings.Initialize.Value;
+                        this.chkSettingInitialize.Checked = Settings.Initialize.Value;
                     }
                     else
                     {
                         this.chkSettingInitialize.Enabled = false;
                     }
 
-                    this.lblSettingMaximumRetriesValue.Text = typedModuleSettings.MaximumRetries.ToString(CultureInfo.CurrentUICulture);
-                    this.lblSettingStatusValue.Text = typedModuleSettings.Status.ToString();
-                    this.lblSettingUserNameValue.Text = typedModuleSettings.UserName;
+                    this.lblSettingMaximumRetriesValue.Text = Settings.MaximumRetries.ToString(CultureInfo.CurrentUICulture);
+                    this.lblSettingStatusValue.Text = Settings.Status.ToString();
+                    this.lblSettingUserNameValue.Text = Settings.UserName;
                 }
                 else
                 {
