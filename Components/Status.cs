@@ -10,7 +10,7 @@
 ' 
 */
 
-namespace XEC.DNN.ModuleSettings.Components
+namespace XEC.DNN.ModuleSettingsModule.Components
 {
     public enum Status
     {

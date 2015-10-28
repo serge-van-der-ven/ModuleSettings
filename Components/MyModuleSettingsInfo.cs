@@ -10,15 +10,17 @@
 ' 
 */
 
+using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Modules;
+using System.Web.Caching;
 
-namespace XEC.DNN.ModuleSettings.Components
+namespace XEC.DNN.ModuleSettingsModule.Components
 {
     /// <summary>
     /// A demo POCO used to get and set DNN module related settings like TabModuleSettings, ModuleSettings and PortalSettings. Note that all property names are indicative 
     /// and used only for demonstration purposes.
     /// </summary>
-    public class MyModuleSettingsInfo
+    public class ModuleSettings
     {
         /// <summary>
         /// Gets or sets the CSS class.
@@ -76,5 +78,29 @@ namespace XEC.DNN.ModuleSettings.Components
         {
             get { return !string.IsNullOrWhiteSpace(this.UserName); }
         }
+
+        public static ModuleSettings GetSettings(ModuleInfo ctlModule)
+        {
+            return CBO.GetCachedObject<ModuleSettings>(new CacheItemArgs(CacheKey(ctlModule.TabModuleID), 20, CacheItemPriority.AboveNormal, ctlModule),
+                                                       GetModuleSettingsCallback,
+                                                       true);
+        }
+        private static ModuleSettings GetModuleSettingsCallback(CacheItemArgs args)
+        {
+            var persister = new ModuleSettingPersister<ModuleSettings>();
+            return persister.Load((ModuleInfo)args.ParamList[0]);
+        }
+
+        public static string CacheKey(int moduleId)
+        {
+            return string.Format("SettingsModule{0}", moduleId);
+        }
+
+        public void Save(ModuleInfo ctlModule)
+        {
+            var persister = new ModuleSettingPersister<ModuleSettings>();
+            persister.Save(this, ctlModule);
+        }
+
     }
 }

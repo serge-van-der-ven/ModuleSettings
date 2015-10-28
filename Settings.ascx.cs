@@ -17,9 +17,9 @@ using System.Web.UI.WebControls;
 using DotNetNuke.Common;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
-using XEC.DNN.ModuleSettings.Components;
+using XEC.DNN.ModuleSettingsModule.Components;
 
-namespace XEC.DNN.ModuleSettings
+namespace XEC.DNN.ModuleSettingsModule
 {
     /// -----------------------------------------------------------------------------
     /// <summary>
@@ -43,6 +43,14 @@ namespace XEC.DNN.ModuleSettings
     /// -----------------------------------------------------------------------------
     public partial class Settings : ModuleSettingsBase
     {
+        private ModuleSettings _settings;
+        public ModuleSettings ModSettings
+        {
+            get { return _settings ?? (_settings = XEC.DNN.ModuleSettingsModule.Components.ModuleSettings.GetSettings(ModuleConfiguration)); }
+            set { _settings = value; }
+        }
+
+
         #region Base Method Implementations
 
         /// -----------------------------------------------------------------------------
@@ -56,19 +64,16 @@ namespace XEC.DNN.ModuleSettings
             {
                 if (!this.Page.IsPostBack)
                 {
-                    var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
-                    var typedSettings = persister.Load(this.Settings);
-
                     this.ddlSettingStatus.Items.AddRange(Enum.GetValues(typeof(Status))
                                                              .OfType<Status>()
                                                              .Select(arg => new ListItem(this.LocalizeString("Status_" + arg.ToString().ToLowerInvariant()), arg.ToString()))
                                                              .ToArray());
 
-                    this.chkSettingInitialize.Checked = typedSettings.Initialize.GetValueOrDefault(false);
-                    this.ddlSettingStatus.SelectedValue = typedSettings.Status.ToString();
-                    this.txtCssClass.Text = typedSettings.CssClass;
-                    this.txtSettingMaximumRetries.Text = typedSettings.MaximumRetries.ToString(CultureInfo.CurrentUICulture);
-                    this.txtSettingUserName.Text = typedSettings.UserName;
+                    this.chkSettingInitialize.Checked = ModSettings.Initialize.GetValueOrDefault(false);
+                    this.ddlSettingStatus.SelectedValue = ModSettings.Status.ToString();
+                    this.txtCssClass.Text = ModSettings.CssClass;
+                    this.txtSettingMaximumRetries.Text = ModSettings.MaximumRetries.ToString(CultureInfo.CurrentUICulture);
+                    this.txtSettingUserName.Text = ModSettings.UserName;
                 }
             }
             catch (Exception exception)
@@ -86,26 +91,24 @@ namespace XEC.DNN.ModuleSettings
         {
             try
             {
-                var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
-
                 // Option 1: Recommended practice. Will load the defaults as well!
-                var typedModuleSettings = persister.Load(this.Settings);
+                // var typedModuleSettings = persister.Load(this.Settings);
 
                 // Option 2: Not recommended since it misses the default values!
                 // var typedModuleSettings = new MyModuleSettingsInfo();
 
                 // Retrieve the settings from the form
-                typedModuleSettings.Initialize = this.chkSettingInitialize.Checked;
-                typedModuleSettings.CssClass = this.txtCssClass.Text;
+                ModSettings.Initialize = this.chkSettingInitialize.Checked;
+                ModSettings.CssClass = this.txtCssClass.Text;
 
                 var maximumRetries = 0;
-                typedModuleSettings.MaximumRetries = int.TryParse(this.txtSettingMaximumRetries.Text, NumberStyles.Integer, CultureInfo.CurrentUICulture, out maximumRetries) ? maximumRetries : 0;
+                ModSettings.MaximumRetries = int.TryParse(this.txtSettingMaximumRetries.Text, NumberStyles.Integer, CultureInfo.CurrentUICulture, out maximumRetries) ? maximumRetries : 0;
 
                 var status = Status.Unknown;
-                typedModuleSettings.Status = Enum.TryParse(this.ddlSettingStatus.SelectedValue, true, out status) ? status : Status.Unknown;
-                typedModuleSettings.UserName = this.txtSettingUserName.Text;
+                ModSettings.Status = Enum.TryParse(this.ddlSettingStatus.SelectedValue, true, out status) ? status : Status.Unknown;
+                ModSettings.UserName = this.txtSettingUserName.Text;
 
-                persister.Save(typedModuleSettings, this.ModuleContext.ModuleId, this.ModuleContext.TabModuleId);
+                ModSettings.Save(this.ModuleConfiguration);
                 // Obviously the statement below works as well...
                 // persister.Save(typedModuleSettings, this.ModuleId, this.TabModuleId);
             }
