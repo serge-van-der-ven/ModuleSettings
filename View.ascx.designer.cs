@@ -22,13 +22,40 @@ namespace XEC.DNN.ModuleSettings {
         protected global::System.Web.UI.WebControls.Label lblModuleInitializedMessage;
         
         /// <summary>
+        /// pnlSettings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSettings;
+        
+        /// <summary>
         /// lblSettingCssClass control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSettingCssClass;
+        protected global::DotNetNuke.UI.UserControls.LabelControl lblSettingCssClass;
+        
+        /// <summary>
+        /// lblSettingCssClassValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSettingCssClassValue;
+        
+        /// <summary>
+        /// lblSettingInitialize control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DotNetNuke.UI.UserControls.LabelControl lblSettingInitialize;
         
         /// <summary>
         /// chkSettingInitialize control.
@@ -46,7 +73,16 @@ namespace XEC.DNN.ModuleSettings {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSettingMaximumRetries;
+        protected global::DotNetNuke.UI.UserControls.LabelControl lblSettingMaximumRetries;
+        
+        /// <summary>
+        /// lblSettingMaximumRetriesValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSettingMaximumRetriesValue;
         
         /// <summary>
         /// lblSettingStatus control.
@@ -55,7 +91,16 @@ namespace XEC.DNN.ModuleSettings {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSettingStatus;
+        protected global::DotNetNuke.UI.UserControls.LabelControl lblSettingStatus;
+        
+        /// <summary>
+        /// lblSettingStatusValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSettingStatusValue;
         
         /// <summary>
         /// lblSettingUserName control.
@@ -64,6 +109,15 @@ namespace XEC.DNN.ModuleSettings {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSettingUserName;
+        protected global::DotNetNuke.UI.UserControls.LabelControl lblSettingUserName;
+        
+        /// <summary>
+        /// lblSettingUserNameValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSettingUserNameValue;
     }
 }

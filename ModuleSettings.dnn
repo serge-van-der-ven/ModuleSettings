@@ -31,7 +31,7 @@
           <desktopModule>
             <moduleName>ModuleSettings</moduleName>
             <foldername>ModuleSettings</foldername>
-            <businessControllerClass>XEC.DNN.ModuleSettings.Components.FeatureController</businessControllerClass>
+            <businessControllerClass />
             <supportedFeatures />
             <moduleDefinitions>
               <moduleDefinition>

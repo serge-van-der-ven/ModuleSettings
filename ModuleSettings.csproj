@@ -63,7 +63,6 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\FeatureController.cs" />
     <Compile Include="Components\MyModuleSettingsInfo.cs" />
     <Compile Include="Components\Status.cs" />
     <Compile Include="Entities\ExtensionMethods.cs" />
@@ -72,6 +71,7 @@
     <Compile Include="Entities\Modules\IParameterGrouping.cs" />
     <Compile Include="Entities\Modules\ModuleSettingAttribute.cs" />
     <Compile Include="Entities\Modules\ModuleSettingPersister.cs" />
+    <Compile Include="Entities\Modules\ParameterMapping.cs" />
     <Compile Include="Entities\Modules\PortalSettingAttribute.cs" />
     <Compile Include="Entities\Modules\TabModuleSettingAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

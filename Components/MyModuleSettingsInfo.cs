@@ -74,7 +74,7 @@ namespace XEC.DNN.ModuleSettings.Components
         /// </value>
         public bool IsInitialized
         {
-            get { return this.Initialize.GetValueOrDefault(false) && !string.IsNullOrWhiteSpace(this.UserName); }
+            get { return !string.IsNullOrWhiteSpace(this.UserName); }
         }
     }
 }

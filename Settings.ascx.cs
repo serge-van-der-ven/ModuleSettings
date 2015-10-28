@@ -12,6 +12,9 @@
 
 using System;
 using System.Globalization;
+using System.Linq;
+using System.Web.UI.WebControls;
+using DotNetNuke.Common;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
 using XEC.DNN.ModuleSettings.Components;
@@ -55,6 +58,11 @@ namespace XEC.DNN.ModuleSettings
                 {
                     var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
                     var typedSettings = persister.Load(this.Settings);
+
+                    ddlSettingStatus.Items.AddRange(Enum.GetValues(typeof(Status))
+                                                        .OfType<Status>()
+                                                        .Select(arg => new ListItem(this.LocalizeString("Status_" + arg.ToString().ToLowerInvariant()), arg.ToString()))
+                                                        .ToArray());
 
                     this.chkSettingInitialize.Checked = typedSettings.Initialize.GetValueOrDefault(false);
                     this.ddlSettingStatus.SelectedValue = typedSettings.Status.ToString();

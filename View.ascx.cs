@@ -12,11 +12,8 @@
 
 using System;
 using System.Globalization;
-using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Entities.Modules;
-using DotNetNuke.Entities.Modules.Actions;
-using DotNetNuke.Services.Localization;
 using XEC.DNN.ModuleSettings.Components;
 
 namespace XEC.DNN.ModuleSettings
@@ -48,12 +45,13 @@ namespace XEC.DNN.ModuleSettings
                 var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
                 var typedModuleSettings = persister.Load(this.Settings);
 
-                if (typedModuleSettings.IsInitialized)
+                // ReSharper disable once AssignmentInConditionalExpression
+                if (this.pnlSettings.Visible = typedModuleSettings.IsInitialized)
                 {
                     this.lblModuleInitializedMessage.Text = this.LocalizeString("ModuleInitializedMessage");
 
 
-                    this.lblSettingCssClass.Text = typedModuleSettings.CssClass;
+                    this.lblSettingCssClassValue.Text = typedModuleSettings.CssClass;
                     if (typedModuleSettings.Initialize.HasValue)
                     {
                         this.chkSettingInitialize.Checked = typedModuleSettings.Initialize.Value;
@@ -63,9 +61,9 @@ namespace XEC.DNN.ModuleSettings
                         this.chkSettingInitialize.Enabled = false;
                     }
 
-                    this.lblSettingMaximumRetries.Text = typedModuleSettings.MaximumRetries.ToString(CultureInfo.CurrentUICulture);
-                    this.lblSettingStatus.Text = typedModuleSettings.Status.ToString();
-                    this.lblSettingUserName.Text = typedModuleSettings.UserName;
+                    this.lblSettingMaximumRetriesValue.Text = typedModuleSettings.MaximumRetries.ToString(CultureInfo.CurrentUICulture);
+                    this.lblSettingStatusValue.Text = typedModuleSettings.Status.ToString();
+                    this.lblSettingUserNameValue.Text = typedModuleSettings.UserName;
                 }
                 else
                 {

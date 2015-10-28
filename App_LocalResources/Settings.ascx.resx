@@ -135,4 +135,22 @@
   <data name="lblSettingUserName.Text" xml:space="preserve">
     <value>User name</value>
   </data>
+  <data name="Status_completed.Text" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Status_done.Text" xml:space="preserve">
+    <value>Done with it!</value>
+  </data>
+  <data name="Status_inprogress.Text" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="Status_new.Text" xml:space="preserve">
+    <value>New item</value>
+  </data>
+  <data name="Status_reviewed.Text" xml:space="preserve">
+    <value>Item reviewed</value>
+  </data>
+  <data name="Status_unknown.Text" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
 </root>

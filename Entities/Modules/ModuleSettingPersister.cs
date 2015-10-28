@@ -19,7 +19,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Caching;
 using DotNetNuke.Common;
-using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Portals;
 using DotNetNuke.Services.Cache;
 using DotNetNuke.Services.Exceptions;
@@ -39,14 +38,18 @@ namespace DotNetNuke.Entities.Modules
         public ModuleSettingPersister()
         {
             this.PortalSettings = PortalSettings.Current;
-            this.Mapping = new Dictionary<BaseParameterAttribute, PropertyInfo>();
+            this.Mapping = this.LoadMapping();
         }
 
         #endregion
 
-        private IDictionary<BaseParameterAttribute, PropertyInfo> Mapping { get; }
+        #region Properties
+
+        private IList<ParameterMapping> Mapping { get; }
 
         private PortalSettings PortalSettings { get; }
+
+        #endregion
 
         public TType Load(Hashtable hastable)
         {
@@ -56,32 +59,30 @@ namespace DotNetNuke.Entities.Modules
             this.Mapping.ForEach(mapping =>
                                  {
                                      object settingValue = null;
-                                     if (mapping.Key is PortalSettingAttribute)
+
+                                     var attribute = mapping.Attribute;
+                                     var property = mapping.Property;
+                                     if (attribute is PortalSettingAttribute)
                                      {
-                                         settingValue = PortalController.GetPortalSetting(mapping.Value.Name, this.PortalSettings.PortalId, null);
-                                         if (string.IsNullOrWhiteSpace((string)settingValue) && (mapping.Key.DefaultValue != null))
+                                         settingValue = PortalController.GetPortalSetting(mapping.ParameterName, this.PortalSettings.PortalId, null);
+                                         if (string.IsNullOrWhiteSpace((string)settingValue) && (attribute.DefaultValue != null))
                                          {
-                                             settingValue = mapping.Key.DefaultValue;
+                                             settingValue = attribute.DefaultValue;
                                          }
                                      }
-                                     else if (hastable.ContainsKey(mapping.Key.ParameterName))
+                                     else if (hastable.ContainsKey(mapping.ParameterName))
                                      {
-                                         settingValue = hastable[mapping.Key.ParameterName];
+                                         settingValue = hastable[mapping.ParameterName];
                                      }
-                                     else if (mapping.Key.DefaultValue != null)
+                                     else if (attribute.DefaultValue != null)
                                      {
-                                         settingValue = mapping.Key.DefaultValue;
-                                     }
-
-                                     if (settingValue != null)
-                                     {
-                                         var property = mapping.Value;
-                                         if (property.CanWrite)
-                                         {
-                                             this.WriteProperty(settings, property, settingValue);
-                                         }
+                                         settingValue = attribute.DefaultValue;
                                      }
 
+                                     if (settingValue != null && property.CanWrite)
+                                     {
+                                         this.WriteProperty(settings, property, settingValue);
+                                     }
                                  });
 
             return settings;
@@ -95,6 +96,7 @@ namespace DotNetNuke.Entities.Modules
             var module = controller.GetTabModule(tabModuleId);
             if (module == null)
             {
+                // TODO: Localize exception
                 throw new ArgumentOutOfRangeException("tabModuleId", tabModuleId, "TabModuleId not found!");
             }
 
@@ -110,8 +112,8 @@ namespace DotNetNuke.Entities.Modules
             var controller = new ModuleController();
             this.Mapping.ForEach(mapping =>
                                  {
-                                     var attribute = mapping.Key;
-                                     var property = mapping.Value;
+                                     var attribute = mapping.Attribute;
+                                     var property = mapping.Property;
 
                                      if (property.CanRead) // Should be, because we asked for properties with a Get accessor.
                                      {
@@ -120,15 +122,15 @@ namespace DotNetNuke.Entities.Modules
                                          {
                                              if (attribute is ModuleSettingAttribute)
                                              {
-                                                 controller.UpdateModuleSetting(moduleId, attribute.ParameterName, settingValue.ToString());
+                                                 controller.UpdateModuleSetting(moduleId, mapping.ParameterName, settingValue.ToString());
                                              }
                                              else if (attribute is TabModuleSettingAttribute)
                                              {
-                                                 controller.UpdateModuleSetting(moduleId, attribute.ParameterName, settingValue.ToString());
+                                                 controller.UpdateModuleSetting(moduleId, mapping.ParameterName, settingValue.ToString());
                                              }
                                              else if (attribute is PortalSettingAttribute)
                                              {
-                                                 PortalController.UpdatePortalSetting(this.PortalSettings.PortalId, attribute.ParameterName, settingValue.ToString());
+                                                 PortalController.UpdatePortalSetting(this.PortalSettings.PortalId, mapping.ParameterName, settingValue.ToString());
                                              }
                                          }
                                      }
@@ -137,16 +139,19 @@ namespace DotNetNuke.Entities.Modules
 
         #region Helpers
 
-        protected void LoadMapping()
+        protected IList<ParameterMapping> LoadMapping()
         {
             var cacheKey = this.CacheKey;
-            var mapping = CachingProvider.Instance().GetItem(cacheKey) as IDictionary<BaseParameterAttribute, PropertyInfo>;
+            var mapping = CachingProvider.Instance().GetItem(cacheKey) as IList<ParameterMapping>;
             if (mapping == null)
             {
                 mapping = this.CreateMapping();
-                // HARDCODED: 2 hour expiration
+                // HARDCODED: 2 hour expiration. 
+                // Note that "caching" can also be accomplished with a static dictionary since the Attribute/Property mapping does not change unless the module is updated.
                 CachingProvider.Instance().Insert(cacheKey, mapping, (DNNCacheDependency)null, DateTime.Now.AddHours(2), Cache.NoSlidingExpiration);
             }
+
+            return mapping;
         }
 
         protected virtual string CacheKey
@@ -158,9 +163,9 @@ namespace DotNetNuke.Entities.Modules
             }
         }
 
-        protected IDictionary<BaseParameterAttribute, PropertyInfo> CreateMapping()
+        protected virtual IList<ParameterMapping> CreateMapping()
         {
-            var mapping = new Dictionary<BaseParameterAttribute, PropertyInfo>();
+            var mapping = new List<ParameterMapping>();
             var type = typeof(TType);
             var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty);
 
@@ -168,29 +173,7 @@ namespace DotNetNuke.Entities.Modules
                                {
                                    // In .NET Framework 4.5.x the call below can be replaced by property.GetCustomAttributes<BaseParameterAttribute>(true);
                                    var attributes = property.GetCustomAttributes(typeof(BaseParameterAttribute), true).OfType<BaseParameterAttribute>(); 
-                                   attributes.ForEach(attribute =>
-                                                      {
-                                                          var attributeName = attribute.ParameterName;
-                                                          if (string.IsNullOrWhiteSpace(attributeName))
-                                                          {
-                                                              attribute.ParameterName = property.Name;
-                                                          }
-
-
-                                                          var parameterGrouping = attribute as IParameterGrouping;
-                                                          if (parameterGrouping != null)
-                                                          {
-                                                              if (!string.IsNullOrWhiteSpace(parameterGrouping.Prefix))
-                                                              {
-                                                                  attributeName = parameterGrouping.Prefix + attributeName;
-                                                              }
-                                                          }
-
-                                                          // Update the ParameterName
-                                                          attribute.ParameterName = attributeName;
-
-                                                          this.Mapping.Add(attribute, property);
-                                                      });
+                                   attributes.ForEach(attribute => mapping.Add(new ParameterMapping(attribute, property)));
                                });
 
             return mapping;
@@ -253,6 +236,7 @@ namespace DotNetNuke.Entities.Modules
             }
             catch (Exception exception)
             {
+                // TODO: Localize exception
                 throw new InvalidCastException(string.Format(CultureInfo.CurrentUICulture, "Could not cast {0} to property {1} of type {2}",
                                                              propertyValue,
                                                              property.Name,
