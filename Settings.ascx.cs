@@ -59,10 +59,10 @@ namespace XEC.DNN.ModuleSettings
                     var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
                     var typedSettings = persister.Load(this.Settings);
 
-                    ddlSettingStatus.Items.AddRange(Enum.GetValues(typeof(Status))
-                                                        .OfType<Status>()
-                                                        .Select(arg => new ListItem(this.LocalizeString("Status_" + arg.ToString().ToLowerInvariant()), arg.ToString()))
-                                                        .ToArray());
+                    this.ddlSettingStatus.Items.AddRange(Enum.GetValues(typeof(Status))
+                                                             .OfType<Status>()
+                                                             .Select(arg => new ListItem(this.LocalizeString("Status_" + arg.ToString().ToLowerInvariant()), arg.ToString()))
+                                                             .ToArray());
 
                     this.chkSettingInitialize.Checked = typedSettings.Initialize.GetValueOrDefault(false);
                     this.ddlSettingStatus.SelectedValue = typedSettings.Status.ToString();
@@ -88,10 +88,10 @@ namespace XEC.DNN.ModuleSettings
             {
                 var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
 
-                // Option 1:
+                // Option 1: Recommended practice. Will load the defaults as well!
                 var typedModuleSettings = persister.Load(this.Settings);
 
-                // Option 2:
+                // Option 2: Not recommended since it misses the default values!
                 // var typedModuleSettings = new MyModuleSettingsInfo();
 
                 // Retrieve the settings from the form
