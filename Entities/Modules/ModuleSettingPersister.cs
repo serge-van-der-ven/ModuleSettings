@@ -126,7 +126,7 @@ namespace DotNetNuke.Entities.Modules
                                              }
                                              else if (attribute is TabModuleSettingAttribute)
                                              {
-                                                 controller.UpdateModuleSetting(moduleId, mapping.ParameterName, settingValue.ToString());
+                                                 controller.UpdateTabModuleSetting(tabModuleId, mapping.ParameterName, settingValue.ToString());
                                              }
                                              else if (attribute is PortalSettingAttribute)
                                              {
