@@ -56,6 +56,13 @@ namespace DotNetNuke.Entities.Modules
             Requires.NotNull("hashtable", hastable);
 
             var settings = new TType();
+            var setupHandler = settings as IParameterSetupHandler;
+            if (setupHandler != null && setupHandler.SetupBeforeLoad)
+            {
+                // NOTE: this type of initialization or setup can usually be accomplished within the constructor of the POCO.
+                setupHandler.Setup();
+            }
+
             this.Mapping.ForEach(mapping =>
                                  {
                                      object settingValue = null;
@@ -84,6 +91,11 @@ namespace DotNetNuke.Entities.Modules
                                          this.WriteProperty(settings, property, settingValue);
                                      }
                                  });
+
+            if (setupHandler != null && !setupHandler.SetupBeforeLoad)
+            {
+                setupHandler.Setup();
+            }
 
             return settings;
         }

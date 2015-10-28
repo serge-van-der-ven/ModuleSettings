@@ -69,6 +69,7 @@
     <Compile Include="Entities\Modules\BaseDnnSettingAttribute.cs" />
     <Compile Include="Entities\Modules\BaseParameterAttribute.cs" />
     <Compile Include="Entities\Modules\IParameterGrouping.cs" />
+    <Compile Include="Entities\Modules\IParameterSetupHandler.cs" />
     <Compile Include="Entities\Modules\ModuleSettingAttribute.cs" />
     <Compile Include="Entities\Modules\ModuleSettingPersister.cs" />
     <Compile Include="Entities\Modules\ParameterMapping.cs" />

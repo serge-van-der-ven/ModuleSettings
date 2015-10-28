@@ -17,8 +17,9 @@ namespace XEC.DNN.ModuleSettings.Components
     /// <summary>
     /// A demo POCO used to get and set DNN module related settings like TabModuleSettings, ModuleSettings and PortalSettings. Note that all property names are indicative 
     /// and used only for demonstration purposes.
+    /// The IParameterSetupHandler is an optional interface and can be used for complex initialization either before or after loading the settings.
     /// </summary>
-    public class MyModuleSettingsInfo
+    public class MyModuleSettingsInfo : IParameterSetupHandler
     {
         /// <summary>
         /// Gets or sets the CSS class.
@@ -72,9 +73,23 @@ namespace XEC.DNN.ModuleSettings.Components
         /// <value>
         /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
         /// </value>
-        public bool IsInitialized
+        public bool IsInitialized => !string.IsNullOrWhiteSpace(this.UserName);
+
+        #region Implementation of IParameterSetupHandler
+
+        public bool SetupBeforeLoad => true;
+
+        public void Setup()
         {
-            get { return !string.IsNullOrWhiteSpace(this.UserName); }
+            // Do additional setup here...
+            // Notes:
+            // 1. IParameterSetupHandler is an optional interface. Only needed if the basic default values as provided by the attributes is not sufficient and additional setup is needed
+            //    after the values have been loaded.
+            // 2. Basic inti
+
+
         }
+
+        #endregion
     }
 }
