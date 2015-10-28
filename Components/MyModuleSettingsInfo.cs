@@ -10,7 +10,7 @@
 ' 
 */
 
-using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Modules.Settings;
 
 namespace XEC.DNN.ModuleSettings.Components
 {

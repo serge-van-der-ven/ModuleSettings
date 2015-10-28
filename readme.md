@@ -11,6 +11,10 @@ concerned with the POCO class - in this example "MyModuleSettingsInfo" and the c
 The persister could also be incorporated in DNN Platform using a generic PortalModuleBase variant, e.g. PortalModuleBase<TType> where TType is the settings POCO. This variant could automatically 
 load the settings into a strongly typed property of type TType.
 
+### Update 2015-10-28
+
+To illustrate the simplicity of the solution a base class has been added for both the PortalModuleBase as well as the ModuleSettingsBase. Please note that the solution only contains a very limited degree of exception handling. The code should be used for educational and training purposes only!
+
 ## IParameterGrouping
 
 This project contains an IParameterGrouping interface which can be used to group parameters / properties in e.g. the user interface which a category identifier. Also parameter names can 

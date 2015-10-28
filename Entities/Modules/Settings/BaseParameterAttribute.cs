@@ -12,13 +12,15 @@
 
 using System;
 
-namespace DotNetNuke.Entities.Modules
+namespace DotNetNuke.Entities.Modules.Settings
 {
     /// <summary>
-    /// When applied to a property this attribute persists the value of the property in the DNN ModuleSettings referenced by the ModuleId within the context.
+    /// Base class for attributes that are used to decorate properties (parameters) related to application settings (storage) or parameters (control) like query string parameters.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class ModuleSettingAttribute : BaseDnnSettingAttribute
+    public abstract class BaseParameterAttribute : Attribute
     {
+        public object DefaultValue { get; set; }
+
+        public string ParameterName { get; set; }
     }
 }

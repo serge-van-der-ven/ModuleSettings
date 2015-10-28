@@ -10,12 +10,19 @@
 ' 
 */
 
-namespace DotNetNuke.Entities.Modules
+namespace DotNetNuke.Entities.Modules.Settings
 {
-    public interface IParameterGrouping
+    /// <summary>
+    /// Base class for an attribute assigned to a DNN setting property (e.g. ModuleSettings, TabModuleSettings, PortalSettings etc.
+    /// </summary>
+    public class BaseDnnSettingAttribute : BaseParameterAttribute, IParameterGrouping
     {
-        string Category { get; set; }
+        #region Implementation of IParameterGrouping
 
-        string Prefix { get; set; }
+        public string Category { get; set; }
+
+        public string Prefix { get; set; }
+
+        #endregion
     }
 }

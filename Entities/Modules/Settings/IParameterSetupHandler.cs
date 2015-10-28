@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DotNetNuke.Entities.Modules
+namespace DotNetNuke.Entities.Modules.Settings
 {
     public interface IParameterSetupHandler
     {

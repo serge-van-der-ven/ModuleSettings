@@ -16,6 +16,7 @@ using System.Linq;
 using System.Web.UI.WebControls;
 using DotNetNuke.Common;
 using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Modules.Settings;
 using DotNetNuke.Services.Exceptions;
 using XEC.DNN.ModuleSettings.Components;
 
@@ -41,7 +42,7 @@ namespace XEC.DNN.ModuleSettings
     /// defined there, as well as properties from DNN such as PortalId, ModuleId, TabId, UserId and many more.
     /// </summary>
     /// -----------------------------------------------------------------------------
-    public partial class Settings : ModuleSettingsBase
+    public partial class Settings : DnnModuleSettingsBase<MyModuleSettingsInfo>
     {
         #region Base Method Implementations
 
@@ -56,19 +57,16 @@ namespace XEC.DNN.ModuleSettings
             {
                 if (!this.Page.IsPostBack)
                 {
-                    var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
-                    var typedSettings = persister.Load(this.Settings);
-
                     this.ddlSettingStatus.Items.AddRange(Enum.GetValues(typeof(Status))
                                                              .OfType<Status>()
                                                              .Select(arg => new ListItem(this.LocalizeString("Status_" + arg.ToString().ToLowerInvariant()), arg.ToString()))
                                                              .ToArray());
 
-                    this.chkSettingInitialize.Checked = typedSettings.Initialize.GetValueOrDefault(false);
-                    this.ddlSettingStatus.SelectedValue = typedSettings.Status.ToString();
-                    this.txtCssClass.Text = typedSettings.CssClass;
-                    this.txtSettingMaximumRetries.Text = typedSettings.MaximumRetries.ToString(CultureInfo.CurrentUICulture);
-                    this.txtSettingUserName.Text = typedSettings.UserName;
+                    this.chkSettingInitialize.Checked = this.Settings.Initialize.GetValueOrDefault(false);
+                    this.ddlSettingStatus.SelectedValue = this.Settings.Status.ToString();
+                    this.txtCssClass.Text = this.Settings.CssClass;
+                    this.txtSettingMaximumRetries.Text = this.Settings.MaximumRetries.ToString(CultureInfo.CurrentUICulture);
+                    this.txtSettingUserName.Text = this.Settings.UserName;
                 }
             }
             catch (Exception exception)
@@ -86,28 +84,18 @@ namespace XEC.DNN.ModuleSettings
         {
             try
             {
-                var persister = new ModuleSettingPersister<MyModuleSettingsInfo>();
-
-                // Option 1: Recommended practice. Will load the defaults as well!
-                var typedModuleSettings = persister.Load(this.Settings);
-
-                // Option 2: Not recommended since it misses the default values!
-                // var typedModuleSettings = new MyModuleSettingsInfo();
-
-                // Retrieve the settings from the form
-                typedModuleSettings.Initialize = this.chkSettingInitialize.Checked;
-                typedModuleSettings.CssClass = this.txtCssClass.Text;
+                
+                this.Settings.Initialize = this.chkSettingInitialize.Checked;
+                this.Settings.CssClass = this.txtCssClass.Text;
 
                 var maximumRetries = 0;
-                typedModuleSettings.MaximumRetries = int.TryParse(this.txtSettingMaximumRetries.Text, NumberStyles.Integer, CultureInfo.CurrentUICulture, out maximumRetries) ? maximumRetries : 0;
+                this.Settings.MaximumRetries = int.TryParse(this.txtSettingMaximumRetries.Text, NumberStyles.Integer, CultureInfo.CurrentUICulture, out maximumRetries) ? maximumRetries : 0;
 
                 var status = Status.Unknown;
-                typedModuleSettings.Status = Enum.TryParse(this.ddlSettingStatus.SelectedValue, true, out status) ? status : Status.Unknown;
-                typedModuleSettings.UserName = this.txtSettingUserName.Text;
+                this.Settings.Status = Enum.TryParse(this.ddlSettingStatus.SelectedValue, true, out status) ? status : Status.Unknown;
+                this.Settings.UserName = this.txtSettingUserName.Text;
 
-                persister.Save(typedModuleSettings, this.ModuleContext.ModuleId, this.ModuleContext.TabModuleId);
-                // Obviously the statement below works as well...
-                // persister.Save(typedModuleSettings, this.ModuleId, this.TabModuleId);
+                this.SaveSettings();
             }
             catch (Exception exception)
             {

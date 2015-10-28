@@ -12,7 +12,7 @@
 
 using System.Reflection;
 
-namespace DotNetNuke.Entities.Modules
+namespace DotNetNuke.Entities.Modules.Settings
 {
     public class ParameterMapping
     {

@@ -10,19 +10,14 @@
 ' 
 */
 
-namespace DotNetNuke.Entities.Modules
+using System;
+
+namespace DotNetNuke.Entities.Modules.Settings
 {
     /// <summary>
-    /// Base class for an attribute assigned to a DNN setting property (e.g. ModuleSettings, TabModuleSettings, PortalSettings etc.
+    /// When applied to a property this attribute persists the value of the property in the DNN TabModuleSettings referenced by the TabModuleId within the context.
     /// </summary>
-    public class BaseDnnSettingAttribute : BaseParameterAttribute, IParameterGrouping
-    {
-        #region Implementation of IParameterGrouping
-
-        public string Category { get; set; }
-
-        public string Prefix { get; set; }
-
-        #endregion
-    }
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public class TabModuleSettingAttribute : BaseDnnSettingAttribute
+    {}
 }

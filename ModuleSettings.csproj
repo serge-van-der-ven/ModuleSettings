@@ -63,18 +63,24 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Modules\DnnModuleSettingsBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Components\MyModuleSettingsInfo.cs" />
     <Compile Include="Components\Status.cs" />
     <Compile Include="Entities\ExtensionMethods.cs" />
-    <Compile Include="Entities\Modules\BaseDnnSettingAttribute.cs" />
-    <Compile Include="Entities\Modules\BaseParameterAttribute.cs" />
-    <Compile Include="Entities\Modules\IParameterGrouping.cs" />
-    <Compile Include="Entities\Modules\IParameterSetupHandler.cs" />
-    <Compile Include="Entities\Modules\ModuleSettingAttribute.cs" />
-    <Compile Include="Entities\Modules\ModuleSettingPersister.cs" />
-    <Compile Include="Entities\Modules\ParameterMapping.cs" />
-    <Compile Include="Entities\Modules\PortalSettingAttribute.cs" />
-    <Compile Include="Entities\Modules\TabModuleSettingAttribute.cs" />
+    <Compile Include="Entities\Modules\DnnPortalModuleBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Entities\Modules\Settings\BaseDnnSettingAttribute.cs" />
+    <Compile Include="Entities\Modules\Settings\BaseParameterAttribute.cs" />
+    <Compile Include="Entities\Modules\Settings\IParameterGrouping.cs" />
+    <Compile Include="Entities\Modules\Settings\IParameterSetupHandler.cs" />
+    <Compile Include="Entities\Modules\Settings\ModuleSettingAttribute.cs" />
+    <Compile Include="Entities\Modules\Settings\ModuleSettingPersister.cs" />
+    <Compile Include="Entities\Modules\Settings\ParameterMapping.cs" />
+    <Compile Include="Entities\Modules\Settings\PortalSettingAttribute.cs" />
+    <Compile Include="Entities\Modules\Settings\TabModuleSettingAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.ascx.cs">
       <DependentUpon>Settings.ascx</DependentUpon>
