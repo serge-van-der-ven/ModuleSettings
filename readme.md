@@ -15,6 +15,10 @@ load the settings into a strongly typed property of type TType.
 
 To illustrate the simplicity of the solution a base class has been added for both the PortalModuleBase as well as the ModuleSettingsBase. Please note that the solution only contains a very limited degree of exception handling. The code should be used for educational and training purposes only!
 
+### Update 2015-12-06
+
+I'm very pleased that the ModuleSettings concept of this project is now part of DNN Platform 8.0. I'd like to thank Peter Donker for his support and adoptation of this concept into DNN Platform and Joe Brinkman for merging the pull requests!  
+
 ## IParameterGrouping
 
 This project contains an IParameterGrouping interface which can be used to group parameters / properties in e.g. the user interface which a category identifier. Also parameter names can 
